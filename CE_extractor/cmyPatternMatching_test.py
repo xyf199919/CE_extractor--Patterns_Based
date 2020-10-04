@@ -34,13 +34,25 @@ dbfile = os.path.join(os.getcwd(), 'CErelation.accdb')
 PEOPLE = ('person', 'individual', 'someone', 'somebody', 'mortal', 'soul', 'being', 'human', 'hominid', 'humans', 'man',
           'mankind')
 ### ---- stanford_parser java package ----  
-os.environ['STANFORD_PARSER'] = r'D:\jars\stanford-parser.jar'
-os.environ['STANFORD_MODELS'] = r'D:\jars\stanford-parser-3.5.2-models.jar'
+# os.environ['CLASSPATH'] = r'/Users/emily/workspace/research/fa20/stanford-parser-full-2015-04-20/*'
+os.environ['STANFORD_PARSER'] = r'/Users/emily/workspace/research/fa20/stanford-parser.jar'
+os.environ['STANFORD_MODELS'] = r'/Users/emily/workspace/research/fa20/stanford-parser-3.5.2-models.jar'
 ### ---- JAVA_HOME path ----
 java_path = r"C:\Program Files\Java\jdk1.8.0_45\bin\java.exe"
 os.environ['JAVAHOME'] = java_path
 ### ---- initiate a parser ----
-parser = stanford.StanfordParser(model_path=r"D:\jars\englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path=r"/Users/emily/workspace/research/fa20/englishPCFG.ser.gz")
+
+# ### original
+# ### ---- stanford_parser java package ----
+# os.environ['STANFORD_PARSER'] = r'D:\jars\stanford-parser.jar'
+# os.environ['STANFORD_MODELS'] = r'D:\jars\stanford-parser-3.5.2-models.jar'
+# ### ---- JAVA_HOME path ----
+# java_path = r"C:\Program Files\Java\jdk1.8.0_45\bin\java.exe"
+# os.environ['JAVAHOME'] = java_path
+# ### ---- initiate a parser ----
+# parser = stanford.StanfordParser(model_path=r"D:\jars\englishPCFG.ser.gz")
+
 
 #######################################################################################
 # --------------------------- Some demonstration functions -------------------------- #
@@ -719,6 +731,8 @@ def checkAddition(subPT, cp, SL, EL, sp, cIdx, eIdx):
         ### ---- if subPT cannot pass above check, re-parse the subPT's text to generate a new parser-tree ----
         ### ---- if new parser-tree is a sent judged by stanford-parser, and has object and predicate ----
         if flag:
+            print "XXXXXXXXXX"
+            print type(parser.raw_parse(' '.join(subPT.leaves())))
             subPT = (parser.raw_parse(' '.join(subPT.leaves()))).next()
             flag, subPT = PTMoveDownward(subPT, ur'S.*')
             print "new subPT:"
