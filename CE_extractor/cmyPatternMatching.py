@@ -292,7 +292,7 @@ def MainTokenRegExp(Patterns):
                     curRegExp += ur' '
                 tokens = p.main_token[pi][ti]
                 ### if current token is a string, add it into curRegExp directly
-                if type(tokens) == str:
+                if type(tokens) == unicode or type(tokens) == str:
                     if tokens in ['.', '?', ':']:
                         curRegExp += '\\'.encode('utf-8')
                     curRegExp += tokens.encode('utf-8')
@@ -1114,8 +1114,8 @@ def CElinksForKG():
 # ---------------------------------- Main function ---------------------------------- #
 #######################################################################################
 if __name__ == "__main__":
-    # CheckPatternsCases()
-    # CElinksForKG()
+    CheckPatternsCases()
+    CElinksForKG()
     CElst2TXT()
     # Fidlst = range(0, 3) + range(13, 16) + range(26, 29)
     # PerCElst2TXT(Fidlst)
