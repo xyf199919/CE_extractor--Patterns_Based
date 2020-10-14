@@ -37,6 +37,8 @@ from cmyPatternMatching import *
 
 
 def check():
+    # ignore this function
+    
     textbook_sentences = ["He never lies; therefore, everyone likes to make friends with him.", "Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun ."]
     textbook_sentences.append("this is a test, so it should pass.")
     textbook_sentences.append("this should pass because it's a test!")
@@ -84,6 +86,8 @@ def check():
     # pt_txt.close()
 
 def get_ce_from_sentences(textbook_sentences, output_filename):
+    # this function takes in list<str> textbook_sentences, return matches to all patterns in csv with output_filename, with rows = ["Pattern_id", "Text", "Cause", "Effect"]
+
     # example input:
     # textbook_sentences = ["He never lies; therefore, everyone likes to make friends with him.", "Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun ."]
     # textbook_sentences.append("this is a test, so it should pass.")
