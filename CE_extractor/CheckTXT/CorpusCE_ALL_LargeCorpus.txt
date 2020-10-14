@@ -1,0 +1,18 @@
+************************************************************
+f0001: Cause-Effect links
+************************************************************
+
+CASE: 1
+Stag: 268 
+	Pattern: 25 [['for']]---- [['&R'], ['&V-ing@C@']]
+	sentTXT: Citation is an individual selection of relevant representations for explaining , evidencing , complementing , commenting , or revising a representation , either explicitly or implicitly , according to individual motivation and knowledge .
+	Cause: explaining , evidencing , complementing , commenting , or revising a representation , either explicitly or implicitly , according to individual motivation and knowledge
+	Effect: Citation is an individual selection of relevant representations
+
+CASE: 2
+Stag: 268 
+	Pattern: 0 [['according', 'to']]---- [['&R', '(,)'], ['&NP@C@']]
+	sentTXT: explaining , evidencing , complementing , commenting , or revising a representation , either explicitly or implicitly , according to individual motivation and knowledge
+	Cause: individual motivation and knowledge
+	Effect: explaining , evidencing , complementing , commenting , or revising a representation , either explicitly or implicitly
+

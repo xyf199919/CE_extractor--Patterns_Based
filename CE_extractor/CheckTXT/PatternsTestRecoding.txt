@@ -1,0 +1,42 @@
+prev Sent: 
+Middle Sent: He never lies ; therefore , everyone likes to make friends with him .
+next Sent: Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun .
+pattern: 1 [[u'therefore']]---- [[u'&C', u'(,/;/./--)', u'(&AND)'], [u'(,)', u'&R']]
+Cause: He never lies
+Effect: everyone likes to make friends with him .
+
+prev Sent: He never lies ; therefore , everyone likes to make friends with him .
+Middle Sent: Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun .
+next Sent: this is a test , so it should pass .
+pattern: 2 [[u'thus']]---- [[u'&C', u'(,/;/./--)', u'(&AND)'], [u'&R']]
+Cause: Japan will be on the dark side of the Earth
+Effect: will lack the warming influence of the Sun .
+
+prev Sent: Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun .
+Middle Sent: this is a test , so it should pass .
+next Sent: this should pass because it 's a test !
+pattern: 0 [[u'so']]---- [[u'&C', u'(,/;/./--)', u'(&AND)'], [u'(-far)', u'(,)', u'&R']]
+Cause: this is a test
+Effect: it should pass .
+
+prev Sent: this is a test , so it should pass .
+Middle Sent: this should pass because it 's a test !
+next Sent: this is a cause .
+pattern: 76 [[u'because']]---- [[u'&R', u'(,)', u'(&ADV)'], [u'&C']]
+Cause: it 's a test !
+Effect: this should pass
+
+prev Sent: this is a cause .
+Middle Sent: Therefore , this is the result .
+next Sent: A commission spokesman said the incidents appeared to amount to discrimination on religious grounds .
+pattern: 1 [[u'therefore']]---- [[u'&C', u'(,/;/./--)', u'(&AND)'], [u'(,)', u'&R']]
+Cause: this is a cause
+Effect: this is the result .
+
+prev Sent: Therefore , this is the result .
+Middle Sent: A commission spokesman said the incidents appeared to amount to discrimination on religious grounds .
+next Sent: 
+pattern: 51 [[u'on'], [u'grounds', u'.']]---- [[u'&R', u'(,)'], [u'&adj/&NP@C@']]
+Cause: religious
+Effect: A commission spokesman said the incidents appeared to amount to discrimination
+
