@@ -38,7 +38,7 @@ from cmyPatternMatching import *
 
 def check():
     # ignore this function
-    
+
     textbook_sentences = ["He never lies; therefore, everyone likes to make friends with him.", "Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun ."]
     textbook_sentences.append("this is a test, so it should pass.")
     textbook_sentences.append("this should pass because it's a test!")
@@ -154,7 +154,36 @@ def get_ce_from_sentences(textbook_sentences, output_filename):
 def ptree(sent):
     return parser.raw_parse(sent)
 
+def Patterns_to_csv():
+    csvfile = codecs.open('patterns.csv', 'w', 'utf8')
+    writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(["pid", "freq", "is_one_sent", "ptxt", "etxt"])
+
+    causaltxt = ReadFile(os.path.join(corpdir, 'causal_links.txt'))
+    causal_txt_lines = causaltxt.splitlines()
+    Patterns = []
+    ptid = 0
+    for txt in causal_txt_lines:
+        ### ---- if a line is a empty string, skip it ----
+        if len(txt) == 0 or re.match(ur"[\s]+$", txt):
+            continue
+        ### ---- if a line started with '#', it is a comment line, skip it ----
+        if re.match(ur"#", txt):
+            continue
+        ### ---- get the 3-level type for each pattern ----
+        ptidx = [int(i) for i in list((re.match(ur'(\d+) (\d+) (\d+) (\d+) (\d+)', txt)).groups())]
+        ### ---- get pattern text for each pattern ----
+        ptxt = re.search(ur'(?<={)(.+)(?=})', txt).group(0)
+        ### ---- get example text list for each pattern ---- 
+        etxt = re.findall(ur'(?<=\[)([^\]]+)(?=\])', txt)
+        ### ---- create a 'pattern' type object and append it into "Patterns" list ----
+        # Patterns.append(pattern(ptidx[0], ptidx[1], ptidx[2:], ptxt, etxt, ptid))
+        row = [ptid, ptidx[0], ptidx[1], ptxt, etxt]
+        writer.writerow(row)
+        ptid += 1
+
 if __name__ == "__main__":
+    # Patterns_to_csv()
     # check()
     # textbook_sentences = ["He never lies; therefore, everyone likes to make friends with him.", "Japan will be on the dark side of the Earth , and thus will lack the warming influence of the Sun ."]
     # textbook_sentences.append("this is a test, so it should pass.")
