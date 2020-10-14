@@ -244,7 +244,7 @@ def ReadFile(fpath):
     # cfn --> shot for current_file_name
     # fp --> the file type pointer
     # fstring --> the string stream of the current_file
-    fp = open(fpath, 'r')
+    fp = codecs.open(fpath, 'r', 'utf8')
     fstring = fp.read()
     fp.close()
 

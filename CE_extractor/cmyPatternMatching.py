@@ -292,7 +292,7 @@ def MainTokenRegExp(Patterns):
                     curRegExp += ur' '
                 tokens = p.main_token[pi][ti]
                 ### if current token is a string, add it into curRegExp directly
-                if type(tokens) == str:
+                if type(tokens) == unicode or type(tokens) == str:
                     if tokens in ['.', '?', ':']:
                         curRegExp += '\\'.encode('utf-8')
                     curRegExp += tokens.encode('utf-8')
@@ -319,7 +319,7 @@ def MainTokenRegExp(Patterns):
                 curRegExp = curRegExp + ur'(.*?)'
             else:
                 curRegExp = curRegExp + ur'(.*)'
-
+        print curRegExp
         mtRegExpList.append(re.compile(curRegExp, re.I))  ###re.I means ignore upper or lower cases
 
     Dumppickle(os.path.join(DICpkdir, 'mtRegExpList.pk'), mtRegExpList)
@@ -712,7 +712,8 @@ def checkAddition(subPT, cp, SL, EL, sp, cIdx, eIdx):
         ### ---- if subPT cannot pass above check, re-parse the subPT's text to generate a new parser-tree ----
         ### ---- if new parser-tree is a sent judged by stanford-parser, and has object and predicate ----
         if flag:
-            subPT = (parser.raw_parse(' '.join(subPT.leaves()))).next()
+            # ORIGINAL subPT = (parser.raw_parse(' '.join(subPT.leaves()))).next()
+            subPT = (parser.raw_parse(' '.join(subPT.leaves())))[0]
             flag, subPT = PTMoveDownward(subPT, ur'S.*')
             ### ---- If reconstructed subPT is a sentence, check whether it has N.* and V.* and N.* is before V.* ----
             try:
@@ -1114,9 +1115,9 @@ def CElinksForKG():
 # ---------------------------------- Main function ---------------------------------- #
 #######################################################################################
 if __name__ == "__main__":
-    # CheckPatternsCases()
+    CheckPatternsCases()
     # CElinksForKG()
-    CElst2TXT()
+    # CElst2TXT()
     # Fidlst = range(0, 3) + range(13, 16) + range(26, 29)
     # PerCElst2TXT(Fidlst)
 

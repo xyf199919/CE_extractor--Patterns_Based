@@ -1123,10 +1123,10 @@ def GettingCEcases(Patterns, mtRegExpList, prePT, curPT, nextPT):
 ###    CEList: CE Link set list for the whole corpus and each member means the CE Link set for a single paper  
 def CElinksForKG():
     ### ---- get pattern list ----
-    # Patterns = TXT2Patterns()
-    # Patterns = OrderPatterns(Patterns, True)
+    Patterns = TXT2Patterns()
+    Patterns = OrderPatterns(Patterns, True)
     ### ---- get mtRegExplist(main_token RegExp List) for all patterns ----
-    # mtRegExpList = MainTokenRegExp(Patterns)
+    mtRegExpList = MainTokenRegExp(Patterns)
     ### ---- CEList store the CElinks for all the corpus ----
     Patterns = Loadpickle(os.path.join(DICpkdir, "Patterns.pk"))
     mtRegExpList = Loadpickle(os.path.join(DICpkdir, "mtRegExpList.pk"))
@@ -1166,7 +1166,7 @@ def CElinksForKG():
         print "Length of CEset for current file:", len(curCEset)
         print
         CEList.append(curCEset)
-    # Dumppickle(os.path.join(DICpkdir, 'KGCEList.pk'), CEList)
+    Dumppickle(os.path.join(DICpkdir, 'KGCEList.pk'), CEList)
     return CEList
 
 
@@ -1174,9 +1174,9 @@ def CElinksForKG():
 # ---------------------------------- Main function ---------------------------------- #
 #######################################################################################
 if __name__ == "__main__":
-    # CheckPatternsCases()
+    CheckPatternsCases()
     CElinksForKG()
-    # CElst2TXT()
+    CElst2TXT()
 
 ############################## Some unused Function #####################################
 #
