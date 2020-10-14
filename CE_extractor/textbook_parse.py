@@ -63,7 +63,7 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
                     for ce in sentCEset:
                         writer.writerow([
                             ce.pt.id,
-                            prev_sent + " " sent + " " + next_sent,
+                            prev_sent + " " + sent + " " + next_sent,
                             ' '.join(ce.cause.PTree.leaves()),
                             ' '.join(ce.effect.PTree.leaves())
                         ])
