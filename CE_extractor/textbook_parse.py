@@ -38,7 +38,7 @@ emptyTree = Tree('ROOT', [])
 with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                                 quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(["Pattern", "Text", "Cause", "Effect"])
+    writer.writerow(["PatternID", "Text", "Cause", "Effect"])
     with open("tqa/tqa_train_val_test/train/tqa_v1_train.json", "r") as f:
         data = json.loads(f.read())
         for d in tqdm(data):
@@ -48,6 +48,8 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
                 textbook_sentences = [i.text for i in nlp(text).sents]
                 tlen = len(textbook_sentences)
                 for ti in range(len(textbook_sentences)):
+                    prev_sent = "" if ti < 1 else textbook_sentences[ti - 1]
+                    next_sent = "" if ti > tlen - 2 else textbook_sentences[ti + 1]
                     sent = textbook_sentences[ti]
                     pppt = ptree(sent)
                     if pppt == []:
@@ -60,8 +62,8 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
                         continue
                     for ce in sentCEset:
                         writer.writerow([
-                            ' %s' % ce.pt.main_token + "----" + ' %s' % ce.pt.constraints,
-                            sent,
+                            ce.pt.id,
+                            prev_sent + " " + sent + " " + next_sent,
                             ' '.join(ce.cause.PTree.leaves()),
                             ' '.join(ce.effect.PTree.leaves())
                         ])
