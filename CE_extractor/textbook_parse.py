@@ -48,8 +48,8 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
                 textbook_sentences = [i.text for i in nlp(text).sents]
                 tlen = len(textbook_sentences)
                 for ti in range(len(textbook_sentences)):
-                    prev_sent = "" if ti < 1 textbook_sentences[ti - 1]
-                    next_sent = "" if ti > tlen - 2 textbook_sentences[ti + 1]
+                    prev_sent = "" if ti < 1 else textbook_sentences[ti - 1]
+                    next_sent = "" if ti > tlen - 2 else textbook_sentences[ti + 1]
                     sent = textbook_sentences[ti]
                     pppt = ptree(sent)
                     if pppt == []:
