@@ -64,7 +64,7 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
                         writer.writerow([
                             ce.pt.id,
                             prev_sent + " " + sent + " " + next_sent,
-                            ' '.join(ce.cause.PTree.leaves()),
-                            ' '.join(ce.effect.PTree.leaves())
+                            u' '.join(ce.cause.PTree.leaves()),
+                            u' '.join(ce.effect.PTree.leaves())
                         ])
                     
