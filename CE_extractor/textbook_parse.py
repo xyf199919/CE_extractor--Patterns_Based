@@ -61,10 +61,12 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
                     if sentCEset == []:
                         continue
                     for ce in sentCEset:
-                        writer.writerow([
-                            ce.pt.id,
-                            prev_sent + " " + sent + " " + next_sent,
-                            u' '.join(ce.cause.PTree.leaves()),
-                            u' '.join(ce.effect.PTree.leaves())
-                        ])
-                    
+                        try:
+                            writer.writerow([
+                                ce.pt.id,
+                                prev_sent + " " + sent + " " + next_sent,
+                                u' '.join(ce.cause.PTree.leaves()),
+                                u' '.join(ce.effect.PTree.leaves())
+                            ])
+                        except:
+                            print(sent)
