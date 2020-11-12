@@ -49,7 +49,7 @@ with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
                     text = para["context"]
                     sentences = [i.text for i in nlp(text).sents]
                     tlen = len(sentences)
-                    for ti in range(len(sentences)):
+                    for ti in tqdm(range(len(sentences))):
                         prev_sent = "" if ti < 1 else sentences[ti - 1]
                         next_sent = "" if ti > tlen - 2 else sentences[ti + 1]
                         sent = sentences[ti]
