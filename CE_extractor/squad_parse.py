@@ -26,7 +26,11 @@ os.environ['JAVAHOME'] = java_path
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
 def ptree(sent):
-    return parser.raw_parse(sent)
+    try:
+        return parser.raw_parse(sent)
+    except:
+        print(sent)
+        return emptyTree
 
 nlp = spacy.load('en_core_web_sm')
 
