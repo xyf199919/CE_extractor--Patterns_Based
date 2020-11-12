@@ -41,7 +41,7 @@ with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
     with open("dev-v2.0.json", "r") as f:
         data = json.load(f)['data']
-        for article in data:
+        for article in tqdm(data):
             paras = article["paragraphs"]
             for para in paras:
                 text = para["context"]
