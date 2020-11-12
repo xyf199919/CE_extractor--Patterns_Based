@@ -41,32 +41,36 @@ with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
     with open("dev-v2.0.json", "r") as f:
         data = json.load(f)['data']
-        for article in tqdm(data):
-            paras = article["paragraphs"]
-            for para in paras:
-                text = para["context"]
-                sentences = [i.text for i in nlp(text).sents]
-                tlen = len(sentences)
-                for ti in range(len(sentences)):
-                    prev_sent = "" if ti < 1 else sentences[ti - 1]
-                    next_sent = "" if ti > tlen - 2 else sentences[ti + 1]
-                    sent = sentences[ti]
-                    pppt = ptree(sent)
-                    if pppt == []:
-                        continue
-                    curPT = pppt[0]
-                    prePT = emptyTree if ti < 1 or ptree(sentences[ti - 1]) == [] else ptree(sentences[ti - 1])[0]
-                    nextPT = emptyTree if ti > tlen - 2 or ptree(sentences[ti + 1]) == [] else ptree(sentences[ti + 1])[0]
-                    sentCEset = GettingCEcases(Patterns, mtRegExplst, prePT, curPT, nextPT)
-                    if sentCEset == []:
-                        continue
-                    for ce in sentCEset:
-                        try:
-                            writer.writerow([
-                                ce.pt.id,
-                                prev_sent + " " + sent + " " + next_sent,
-                                u' '.join(ce.cause.PTree.leaves()),
-                                u' '.join(ce.effect.PTree.leaves())
-                            ])
-                        except:
-                            print(sent)
+        import pdb; pdb.set_trace()
+        total = sum([len(article["paragraphs"]) for article in data])
+        with tqdm(total=total) as pbar:
+            for article in data:
+                paras = article["paragraphs"]
+                for para in paras:
+                    text = para["context"]
+                    sentences = [i.text for i in nlp(text).sents]
+                    tlen = len(sentences)
+                    for ti in range(len(sentences)):
+                        prev_sent = "" if ti < 1 else sentences[ti - 1]
+                        next_sent = "" if ti > tlen - 2 else sentences[ti + 1]
+                        sent = sentences[ti]
+                        pppt = ptree(sent)
+                        if pppt == []:
+                            continue
+                        curPT = pppt[0]
+                        prePT = emptyTree if ti < 1 or ptree(sentences[ti - 1]) == [] else ptree(sentences[ti - 1])[0]
+                        nextPT = emptyTree if ti > tlen - 2 or ptree(sentences[ti + 1]) == [] else ptree(sentences[ti + 1])[0]
+                        sentCEset = GettingCEcases(Patterns, mtRegExplst, prePT, curPT, nextPT)
+                        if sentCEset == []:
+                            continue
+                        for ce in sentCEset:
+                            try:
+                                writer.writerow([
+                                    ce.pt.id,
+                                    prev_sent + " " + sent + " " + next_sent,
+                                    u' '.join(ce.cause.PTree.leaves()),
+                                    u' '.join(ce.effect.PTree.leaves())
+                                ])
+                            except:
+                                print(sent)
+                    pbar.update(1)
