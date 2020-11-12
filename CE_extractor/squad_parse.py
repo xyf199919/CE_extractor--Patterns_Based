@@ -41,7 +41,6 @@ with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
     with open("dev-v2.0.json", "r") as f:
         data = json.load(f)['data']
-        import pdb; pdb.set_trace()
         total = sum([len(article["paragraphs"]) for article in data])
         with tqdm(total=total) as pbar:
             for article in data:
