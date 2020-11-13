@@ -30,7 +30,7 @@ def ptree(sent):
         return parser.raw_parse(sent)
     except:
         print(sent)
-        return emptyTree
+        return [emptyTree]
 
 nlp = spacy.load('en_core_web_sm')
 
