@@ -11,22 +11,40 @@ from nltk.tree import *
 from nltk.corpus import wordnet as wn
 from tqdm import tqdm
 
-from cmyPatternMatching import TXT2Patterns, OrderPatterns, MainTokenRegExp, GettingCEcases
+from cmyPatternMatching import (
+    TXT2Patterns,
+    OrderPatterns,
+    MainTokenRegExp,
+    GettingCEcases,
+)
 
 # --------- people hypernym set ------------------
-PEOPLE = ('person', 'individual', 'someone', 'somebody', 'mortal', 'soul', 'being', 'human', 'hominid', 'humans', 'man',
-          'mankind')
-### ---- stanford_parser java package ----  
-os.environ['STANFORD_PARSER'] = r'../../stanford-parser.jar'
-os.environ['STANFORD_MODELS'] = r'../../stanford-parser-3.5.2-models.jar'
+PEOPLE = (
+    "person",
+    "individual",
+    "someone",
+    "somebody",
+    "mortal",
+    "soul",
+    "being",
+    "human",
+    "hominid",
+    "humans",
+    "man",
+    "mankind",
+)
+### ---- stanford_parser java package ----
+os.environ["STANFORD_PARSER"] = r"../../stanford-parser.jar"
+os.environ["STANFORD_MODELS"] = r"../../stanford-parser-3.5.2-models.jar"
 ### ---- JAVA_HOME path ----
 java_path = r"C:\Program Files\Java\jdk1.8.0_45\bin\java.exe"
-os.environ['JAVAHOME'] = java_path
-### ---- initiate a parser ---- 
+os.environ["JAVAHOME"] = java_path
+### ---- initiate a parser ----
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
 f1 = codecs.open("squad_parse_errors.txt", "w", encoding="utf-8")
 mem_errors, encoding_errors = 0, 0
+
 
 def ptree(sent):
     global mem_errors, f1
@@ -39,6 +57,7 @@ def ptree(sent):
         f1.write("\n")
         return [emptyTree]
 
+
 def clean_text(text):
     return (
         text.replace(" ,", ",")
@@ -48,8 +67,8 @@ def clean_text(text):
         .replace(" :", ":")
         .replace(" ;", ";")
         .replace(" %", "%")
-        .replace("`` ", "\"")
-        .replace(" \'\'", "\"")
+        .replace("`` ", '"')
+        .replace(" ''", '"')
         .replace("-LRB-", "(")
         .replace("-RRB-", ")")
         .replace("( ", "(")
@@ -66,19 +85,19 @@ def clean_text(text):
         .replace("  ", " ")
     )
 
-nlp = spacy.load('en_core_web_sm')
+
+nlp = spacy.load("en_core_web_sm")
 
 Patterns = TXT2Patterns()
 Patterns = OrderPatterns(Patterns, True)
 mtRegExplst = MainTokenRegExp(Patterns)
-emptyTree = Tree('ROOT', [])
+emptyTree = Tree("ROOT", [])
 
-with codecs.open('squad_ce.csv', 'w', 'utf-8') as csvfile:
-    writer = csv.writer(csvfile, delimiter=',',
-                                quoting=csv.QUOTE_MINIMAL)
+with codecs.open("squad_ce.csv", "w", "utf-8") as csvfile:
+    writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
-    with codecs.open("dev-v2.0.json", "r", encoding='utf-8') as f:
-        data = json.load(f)['data']
+    with codecs.open("dev-v2.0.json", "r", encoding="utf-8") as f:
+        data = json.load(f)["data"]
         total = sum([len(article["paragraphs"]) for article in data])
         with tqdm(total=total) as pbar:
             for article in data:
@@ -95,22 +114,37 @@ with codecs.open('squad_ce.csv', 'w', 'utf-8') as csvfile:
                         if pppt == []:
                             continue
                         curPT = pppt[0]
-                        prePT = emptyTree if ti < 1 or ptree(sentences[ti - 1]) == [] else ptree(sentences[ti - 1])[0]
-                        nextPT = emptyTree if ti > tlen - 2 or ptree(sentences[ti + 1]) == [] else ptree(sentences[ti + 1])[0]
-                        sentCEset = GettingCEcases(Patterns, mtRegExplst, prePT, curPT, nextPT)
+                        prePT = (
+                            emptyTree
+                            if ti < 1 or ptree(sentences[ti - 1]) == []
+                            else ptree(sentences[ti - 1])[0]
+                        )
+                        nextPT = (
+                            emptyTree
+                            if ti > tlen - 2 or ptree(sentences[ti + 1]) == []
+                            else ptree(sentences[ti + 1])[0]
+                        )
+                        sentCEset = GettingCEcases(
+                            Patterns, mtRegExplst, prePT, curPT, nextPT
+                        )
                         if sentCEset == []:
                             continue
                         for ce in sentCEset:
                             try:
-                                context = clean_text(' '.join(prePT.leaves())) \
-                                            + " " + clean_text(' '.join(prePT.leaves())) \
-                                            + " " + clean_text(' '.join(prePT.leaves()))
-                                writer.writerow([
-                                    ce.pt.id,
-                                    prev_sent + " " + sent + " " + next_sent,
-                                    clean_text(u' '.join(ce.cause.PTree.leaves())).strip(".,!?\'\"-'` "),
-                                    clean_text(u' '.join(ce.effect.PTree.leaves())).strip(".,!?\'\"-'` ")
-                                ])
+                                context = (
+                                    clean_text(" ".join(prePT.leaves()))
+                                    + " "
+                                    + clean_text(" ".join(prePT.leaves()))
+                                    + " "
+                                    + clean_text(" ".join(prePT.leaves()))
+                                )
+                                cause = clean_text(
+                                    u" ".join(ce.cause.PTree.leaves())
+                                ).strip(".,!?'\"-'` ")
+                                effect = clean_text(
+                                    u" ".join(ce.effect.PTree.leaves())
+                                ).strip(".,!?'\"-'` ")
+                                writer.writerow([ce.pt.id, context, cause, effect])
                             except:
                                 encoding_errors += 1
                                 f1.write("E: ")
