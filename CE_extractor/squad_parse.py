@@ -25,18 +25,18 @@ os.environ['JAVAHOME'] = java_path
 ### ---- initiate a parser ---- 
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
-f = codecs.open("squad_parse_errors.txt", "w", encoding="utf-8")
+f1 = codecs.open("squad_parse_errors.txt", "w", encoding="utf-8")
 mem_errors, encoding_errors = 0, 0
 
 def ptree(sent):
-    global mem_errors
+    global mem_errors, f1
     try:
         return parser.raw_parse(sent)
     except:
         mem_errors += 1
-        f.write("M: ")
-        f.write(sent)
-        f.write("\n")
+        f1.write("M: ")
+        f1.write(sent)
+        f1.write("\n")
         return [emptyTree]
 
 def clean_text(text):
@@ -113,11 +113,11 @@ with codecs.open('squad_ce.csv', 'w', 'utf-8') as csvfile:
                                 ])
                             except:
                                 encoding_errors += 1
-                                f.write("E: ")
-                                f.write(sent)
-                                f.write("\n")
+                                f1.write("E: ")
+                                f1.write(sent)
+                                f1.write("\n")
                     pbar.update(1)
 
 print(mem_errors, encoding_errors)
-f.write("{}, {}".format(mem_errors, encoding_errors))
-f.close()
+f1.write("{}, {}".format(mem_errors, encoding_errors))
+f1.close()
