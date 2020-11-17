@@ -43,7 +43,7 @@ os.environ["JAVAHOME"] = java_path
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
 f1 = codecs.open("squad_parse_errors.txt", "w", encoding="utf-8")
-mem_errors, encoding_errors = 0, 0
+mem_errors, encoding_errors, count = 0, 0, 0
 
 
 def ptree(sent):
@@ -93,7 +93,7 @@ Patterns = OrderPatterns(Patterns, True)
 mtRegExplst = MainTokenRegExp(Patterns)
 emptyTree = Tree("ROOT", [])
 
-with codecs.open("squad_ce.csv", "w", "utf-8") as csvfile:
+with codecs.open("squad_ce.csv", "w", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
     with codecs.open("dev-v2.0.json", "r", encoding="utf-8") as f:
@@ -134,9 +134,9 @@ with codecs.open("squad_ce.csv", "w", "utf-8") as csvfile:
                                 context = (
                                     clean_text(" ".join(prePT.leaves()))
                                     + " "
-                                    + clean_text(" ".join(prePT.leaves()))
+                                    + clean_text(" ".join(curPT.leaves()))
                                     + " "
-                                    + clean_text(" ".join(prePT.leaves()))
+                                    + clean_text(" ".join(nextPT.leaves()))
                                 )
                                 cause = clean_text(
                                     u" ".join(ce.cause.PTree.leaves())
@@ -152,6 +152,6 @@ with codecs.open("squad_ce.csv", "w", "utf-8") as csvfile:
                                 f1.write("\n")
                     pbar.update(1)
 
-print(mem_errors, encoding_errors)
-f1.write("{}, {}".format(mem_errors, encoding_errors))
+print(mem_errors, encoding_errors, count)
+f1.write("{}, {}, {}".format(mem_errors, encoding_errors, count))
 f1.close()
