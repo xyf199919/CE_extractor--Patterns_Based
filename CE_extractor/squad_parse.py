@@ -25,7 +25,7 @@ os.environ['JAVAHOME'] = java_path
 ### ---- initiate a parser ---- 
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
-f = open("errors.txt", "w", encoding="utf-8")
+f = codecs.open("squad_parse_errors.txt", "w", encoding="utf-8")
 mem_errors, encoding_errors = 0, 0
 
 def ptree(sent):
@@ -39,6 +39,33 @@ def ptree(sent):
         f.write("\n")
         return [emptyTree]
 
+def clean_text(text):
+    return (
+        text.replace(" ,", ",")
+        .replace(" .", ".")
+        .replace(" !", "!")
+        .replace(" ?", "?")
+        .replace(" :", ":")
+        .replace(" ;", ";")
+        .replace(" %", "%")
+        .replace("`` ", "\"")
+        .replace(" \'\'", "\"")
+        .replace("-LRB-", "(")
+        .replace("-RRB-", ")")
+        .replace("( ", "(")
+        .replace(" )", ")")
+        .replace("can not", "cannot")
+        .replace(" o ", "o ")
+        .replace(" x,", "x,")
+        .replace(" -", "-")
+        .replace("- ", "-")
+        .replace("+ ", "+")
+        .replace(" +", "+")
+        .replace(" >", ">")
+        .replace("> ", ">")
+        .replace("  ", " ")
+    )
+
 nlp = spacy.load('en_core_web_sm')
 
 Patterns = TXT2Patterns()
@@ -46,11 +73,11 @@ Patterns = OrderPatterns(Patterns, True)
 mtRegExplst = MainTokenRegExp(Patterns)
 emptyTree = Tree('ROOT', [])
 
-with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
+with codecs.open('squad_ce.csv', 'w', 'utf-8') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                                 quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
-    with open("dev-v2.0.json", "r") as f:
+    with codecs.open("dev-v2.0.json", "r", encoding='utf-8') as f:
         data = json.load(f)['data']
         total = sum([len(article["paragraphs"]) for article in data])
         with tqdm(total=total) as pbar:
@@ -75,11 +102,14 @@ with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
                             continue
                         for ce in sentCEset:
                             try:
+                                context = clean_text(' '.join(prePT.leaves())) \
+                                            + " " + clean_text(' '.join(prePT.leaves())) \
+                                            + " " + clean_text(' '.join(prePT.leaves()))
                                 writer.writerow([
                                     ce.pt.id,
                                     prev_sent + " " + sent + " " + next_sent,
-                                    u' '.join(ce.cause.PTree.leaves()),
-                                    u' '.join(ce.effect.PTree.leaves())
+                                    clean_text(u' '.join(ce.cause.PTree.leaves())).strip(".,!?\'\"-'` "),
+                                    clean_text(u' '.join(ce.effect.PTree.leaves())).strip(".,!?\'\"-'` ")
                                 ])
                             except:
                                 encoding_errors += 1
