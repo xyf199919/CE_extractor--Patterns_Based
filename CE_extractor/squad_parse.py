@@ -25,11 +25,18 @@ os.environ['JAVAHOME'] = java_path
 ### ---- initiate a parser ---- 
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
+f = open("errors.txt", "w", encoding="utf-8")
+mem_errors, encoding_errors = 0, 0
+
 def ptree(sent):
+    global mem_errors
     try:
         return parser.raw_parse(sent)
     except:
-        print(sent)
+        mem_errors += 1
+        f.write("M: ")
+        f.write(sent)
+        f.write("\n")
         return [emptyTree]
 
 nlp = spacy.load('en_core_web_sm')
@@ -75,5 +82,12 @@ with codecs.open('squad_ce.csv', 'w', 'utf8') as csvfile:
                                     u' '.join(ce.effect.PTree.leaves())
                                 ])
                             except:
-                                print(sent)
+                                encoding_errors += 1
+                                f.write("E: ")
+                                f.write(sent)
+                                f.write("\n")
                     pbar.update(1)
+
+print(mem_errors, encoding_errors)
+f.write("{}, {}".format(mem_errors, encoding_errors))
+f.close()
