@@ -42,7 +42,7 @@ os.environ["JAVAHOME"] = java_path
 ### ---- initiate a parser ----
 parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
 
-f1 = codecs.open("squad_parse_errors.txt", "w", encoding="utf-8")
+f1 = codecs.open("textbook_parse_errors.txt", "w", encoding="utf-8")
 mem_errors, encoding_errors, count = 0, 0, 0
 
 
