@@ -51,3 +51,5 @@ CE_extractor/Corpus/errorfile2.txt
 *.pyc
 tqa_train_val_test
 dev-v2.0.json
+*errors.txt
+*_ce.csv
