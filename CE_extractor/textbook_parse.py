@@ -11,36 +11,7 @@ from nltk.tree import *
 from nltk.corpus import wordnet as wn
 from tqdm import tqdm
 
-from cmyPatternMatching import (
-    TXT2Patterns,
-    OrderPatterns,
-    MainTokenRegExp,
-    GettingCEcases,
-)
-
-# --------- people hypernym set ------------------
-PEOPLE = (
-    "person",
-    "individual",
-    "someone",
-    "somebody",
-    "mortal",
-    "soul",
-    "being",
-    "human",
-    "hominid",
-    "humans",
-    "man",
-    "mankind",
-)
-### ---- stanford_parser java package ----
-os.environ["STANFORD_PARSER"] = r"../../stanford-parser.jar"
-os.environ["STANFORD_MODELS"] = r"../../stanford-parser-3.5.2-models.jar"
-### ---- JAVA_HOME path ----
-java_path = r"C:\Program Files\Java\jdk1.8.0_45\bin\java.exe"
-os.environ["JAVAHOME"] = java_path
-### ---- initiate a parser ----
-parser = stanford.StanfordParser(model_path=r"../../englishPCFG.ser.gz")
+from cmyPatternMatching import *
 
 f1 = codecs.open("textbook_parse_errors.txt", "w", encoding="utf-8")
 mem_errors, encoding_errors, count = 0, 0, 0
@@ -97,7 +68,7 @@ with codecs.open("textbook_ce.csv", "w", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
     with codecs.open(
-        "tqa/tqa_train_val_test/train/tqa_v1_train.json", "r", encoding="utf-8"
+        "tqa_train_val_test/train/tqa_v1_train.json", "r", encoding="utf-8"
     ) as f:
         data = json.loads(f.read())
         total = sum([len(d["topics"]) for d in data])
@@ -154,7 +125,6 @@ with codecs.open("textbook_ce.csv", "w", encoding="utf-8") as csvfile:
                                 f1.write(sent)
                                 f1.write("\n")
                     pbar.update(1)
-
 
 print(mem_errors, encoding_errors, count)
 f1.write("{}, {}, {}".format(mem_errors, encoding_errors, count))
