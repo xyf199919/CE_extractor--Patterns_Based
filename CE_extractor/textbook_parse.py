@@ -39,7 +39,7 @@ with codecs.open('textbook.csv', 'w', 'utf8') as csvfile:
     writer = csv.writer(csvfile, delimiter=',',
                                 quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["PatternID", "Text", "Cause", "Effect"])
-    with open("tqa/tqa_train_val_test/train/tqa_v1_train.json", "r") as f:
+    with open("tqa_train_val_test/train/tqa_v1_train.json", "r") as f:
         data = json.loads(f.read())
         for d in tqdm(data):
             topics = d['topics']
